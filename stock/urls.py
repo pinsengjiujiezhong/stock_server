@@ -15,9 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf.urls import url, include
+from django.urls import path
 from rose.views import Rose
 from optional.views import Optional, CheckCode, KLine
 from limitup.views import LimitUp
+from django.views.generic import TemplateView
+from django.views import static
+from django.conf import settings
 
 urlpatterns = [
     url('admin/', admin.site.urls),
@@ -26,4 +30,6 @@ urlpatterns = [
     url(r'^check/$', CheckCode.as_view(), name='CheckCode'),
     url(r'^kline/$', KLine.as_view(), name='KLine'),
     url(r'^limitup/$', LimitUp.as_view(), name='LimitUp'),
+    url(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT}, name='static'),
+    path('', TemplateView.as_view(template_name='index.html'), name='index'),
 ]

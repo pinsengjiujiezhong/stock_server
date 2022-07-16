@@ -32,7 +32,7 @@ class Optional(View):
 class CheckCode(View):
     def get(self, request):
         code = request.GET.get('code', '')
-        result = codeMongo.find_one({'code': code})
+        result = codeMongo.find_one({'symbol': code})
         check = False
         if result:
             check = True
