@@ -5,18 +5,6 @@ from django.views.generic.base import View
 from django.shortcuts import render, HttpResponse
 from util.db import roseMongo
 
-def executeSql(sql):
-    db = pymysql.connect(host='localhost',
-                         user='root',
-                         password='root',
-                         database='stock',
-                         charset='utf8')
-    cursor = db.cursor()
-    cursor.execute(sql)
-    db.commit()
-    data = cursor.fetchall()
-    return data
-
 
 class Rose(View):
     def get(self, request):
