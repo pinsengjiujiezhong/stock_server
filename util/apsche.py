@@ -1,11 +1,15 @@
 #coding=utf-8
 __author__ = 'kai.yang'
 __date__ = '2022/7/14 22:38'
-import time
+import platform
 from apscheduler.schedulers.blocking import BlockingScheduler
-from util.get_stock_info import getStockDateLineAll, getStockNameInfo
-from util.get_stock_rose import getRose, prints
 
+if platform.system().lower() == 'windows':
+    from util.get_stock_info import getStockDateLineAll, getStockNameInfo
+    from util.get_stock_rose import getRose
+elif platform.system().lower() == 'linux':
+    from get_stock_info import getStockDateLineAll, getStockNameInfo
+    from get_stock_rose import getRose
 
 
 scheduler = BlockingScheduler()

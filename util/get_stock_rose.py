@@ -1,47 +1,60 @@
 import pymysql
 import json, time
-from util.params import ROSE_NUMBER
-from util.db import codeMongo, dateLineMongo, roseMongo
+import platform
 
+if platform.system().lower() == 'windows':
+    from util.db import codeMongo, dateLineMongo, roseMongo
+    from util.params import PRO
+    from util.get_tushare import parse_pandas
+elif platform.system().lower() == 'linux':
+    from db import codeMongo, dateLineMongo, roseMongo
 
 
 def getRose():
     dateLines = dateLineMongo.find()
+    ts_codes = [item['ts_code'] for item in roseMongo.find()]
     for dateLine in dateLines:
+        if dateLine['ts_code'][:2] in ['30', '68']:
+            continue
         trendList = []
         dates = []
         prices = []
-        ts_codes = [item['ts_code'] for item in roseMongo.find()]
-        for daily in dateLine['data_line']:
-            trendList.append({'date': daily['trade_date'], 'price': daily['pre_close']})
-            dates.append(daily['trade_date'])
-            prices.append(daily['pre_close'])
         previous = num = 0
-        if dateLine['ts_code'] in ['30', '68']:
-            continue
-        for daily in dateLine['data_line']:
+        monthprevious = monthnum = 0
+        for daily in dateLine['date_line']:
+            trendList.append({'date': daily['trade_date'], 'price': daily['close']})
+            dates.append(daily['trade_date'])
+            prices.append(daily['close'])
+        for daily in dateLine['date_line']:
             if not previous:
-                previous = daily['pre_close']
+                previous = daily['close']
                 continue
-            if previous > daily['pre_close']:
+            if previous > daily['close']:
                 num += 1
-                previous = daily['pre_close']
+                previous = daily['close']
             else:
                 break
-        print(daily, num)
+        for daily in dateLine['date_line']:
+            if not monthprevious:
+                monthprevious = daily['close']
+                continue
+            if monthprevious > daily['close']:
+                monthnum += 1
+            monthprevious = daily['close']
         item = {
             'code': dateLine['ts_code'][:6],
             'ts_code': dateLine['ts_code'],
             'name': codeMongo.find_one({'ts_code': dateLine['ts_code']})['name'],
             'trend': trendList,
             'num': num,
+            'monthnum': monthnum,
             'dates': dates,
             'prices': prices,
         }
-        print('item: ', item)
+        print('item: ', item['ts_code'])
         if dateLine['ts_code'] in ts_codes:
             roseMongo.delete_one({'ts_code': dateLine['ts_code']})
-        roseMongo.insert(item)
+        roseMongo.insert_one(item)
 
 
 def prints():

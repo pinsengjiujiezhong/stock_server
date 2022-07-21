@@ -1,7 +1,7 @@
 #coding=utf-8
 __author__ = 'kai.yang'
 __date__ = '2022/7/5 21:55'
-
+import tushare as ts
 ROSE_NUMBER = 2
 GET_OPTIONAL_URL = 'https://d.10jqka.com.cn/multimarketreal/hs/{code}/1968584_13_19_3541450_526792_6_7_8_9_10_2034120_199112_264648?callback=multimarketreal'
 GET_KLINE_URL = 'https://d.10jqka.com.cn/v2/time/{code}/last.js'
@@ -33,3 +33,5 @@ WENCAI_HEADERS = {
   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36',
   'envtag': 'yzg'
 }
+
+PRO = ts.pro_api('894845b7579667dce1beefd2e7121bd2be05afec7533958700583a2e')
