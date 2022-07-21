@@ -42,8 +42,8 @@ class CheckCode(View):
 class KLine(View):
     def get(self, request):
         code = request.GET.get('code', '')
-        codeObj = codeMongo.find_one({'code': code})
-        kcode = codeObj['ts_code'][-2:] + '_' + codeObj['code']
+        codeObj = codeMongo.find_one({'symbol': code})
+        kcode = codeObj['ts_code'][-2:] + '_' + codeObj['symbol']
         url = GET_KLINE_URL.format(code=kcode)
         response = requests.request("GET", url, headers=TONGHUASHUN_HEADERS, data={})
         print('\"%s\":(.+?)\}\)'%kcode)
