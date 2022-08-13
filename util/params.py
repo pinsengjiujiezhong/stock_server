@@ -5,6 +5,7 @@ import tushare as ts
 ROSE_NUMBER = 2
 GET_OPTIONAL_URL = 'https://d.10jqka.com.cn/multimarketreal/hs/{code}/1968584_13_19_3541450_526792_6_7_8_9_10_2034120_199112_264648?callback=multimarketreal'
 GET_KLINE_URL = 'https://d.10jqka.com.cn/v2/time/{code}/last.js'
+TANGLU = 'LUJIGUN'
 
 TONGHUASHUN_HEADERS = {
     'Accept': '*/*',
